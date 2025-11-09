@@ -192,23 +192,319 @@ if (quoteForm) {
     });
 }
 
+// ============================================
+// Email Logging System (Background - Text File)
+// ============================================
+const emailLogs = [];
+
+// Load logs from localStorage on page load
+function loadLogsFromStorage() {
+    try {
+        const savedLogs = localStorage.getItem('emailLogs');
+        if (savedLogs) {
+            const parsed = JSON.parse(savedLogs);
+            emailLogs.push(...parsed);
+        }
+    } catch (e) {
+        console.warn('Failed to load logs from storage:', e);
+    }
+}
+
+// Save logs to localStorage
+function saveLogsToStorage() {
+    try {
+        localStorage.setItem('emailLogs', JSON.stringify(emailLogs));
+    } catch (e) {
+        console.warn('Failed to save logs to storage:', e);
+    }
+}
+
+function logEmailEvent(type, message, data = null) {
+    const timestamp = new Date().toLocaleString();
+    const isoTimestamp = new Date().toISOString();
+    const logEntry = {
+        timestamp,
+        isoTimestamp,
+        type, // 'info', 'success', 'error', 'warning'
+        message,
+        data
+    };
+    
+    emailLogs.push(logEntry);
+    
+    // Save to localStorage
+    saveLogsToStorage();
+    
+    // Console logging with color coding
+    const logPrefix = `[EMAIL LOG ${timestamp}]`;
+    switch(type) {
+        case 'success':
+            console.log(`%c${logPrefix} ✅ ${message}`, 'color: #10b981; font-weight: bold;', data || '');
+            break;
+        case 'error':
+            console.error(`%c${logPrefix} ❌ ${message}`, 'color: #ef4444; font-weight: bold;', data || '');
+            break;
+        case 'warning':
+            console.warn(`%c${logPrefix} ⚠️ ${message}`, 'color: #f59e0b; font-weight: bold;', data || '');
+            break;
+        default:
+            console.log(`%c${logPrefix} ℹ️ ${message}`, 'color: #3b82f6; font-weight: bold;', data || '');
+    }
+    
+    // Auto-save to text file after each log entry
+    saveLogsToFile();
+}
+
+// Convert logs to text format
+function formatLogsAsText() {
+    let text = '='.repeat(80) + '\n';
+    text += 'JS WINDSHIELD - EMAIL SUBMISSION LOGS\n';
+    text += '='.repeat(80) + '\n';
+    text += `Generated: ${new Date().toLocaleString()}\n`;
+    text += `Total Log Entries: ${emailLogs.length}\n`;
+    text += '='.repeat(80) + '\n\n';
+    
+    emailLogs.forEach((log, index) => {
+        text += `[Entry ${index + 1}]\n`;
+        text += `Timestamp: ${log.timestamp}\n`;
+        text += `Type: ${log.type.toUpperCase()}\n`;
+        text += `Message: ${log.message}\n`;
+        
+        if (log.data) {
+            text += `Data:\n`;
+            if (typeof log.data === 'object') {
+                text += JSON.stringify(log.data, null, 2) + '\n';
+            } else {
+                text += log.data + '\n';
+            }
+        }
+        
+        text += '-'.repeat(80) + '\n\n';
+    });
+    
+    return text;
+}
+
+// Save logs to downloadable text file
+function saveLogsToFile() {
+    try {
+        const logText = formatLogsAsText();
+        const blob = new Blob([logText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        
+        // Create download link (hidden)
+        let downloadLink = document.getElementById('emailLogDownloadLink');
+        if (!downloadLink) {
+            downloadLink = document.createElement('a');
+            downloadLink.id = 'emailLogDownloadLink';
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+        }
+        
+        downloadLink.href = url;
+        downloadLink.download = `email-logs-${new Date().toISOString().split('T')[0]}.txt`;
+        
+        // Auto-download only on form submission completion
+        // (not on every log entry to avoid too many downloads)
+    } catch (e) {
+        console.error('Failed to save logs to file:', e);
+    }
+}
+
+// Download logs as text file (call this manually or after form submission)
+function downloadEmailLogs() {
+    try {
+        const logText = formatLogsAsText();
+        const blob = new Blob([logText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `email-logs-${new Date().toISOString().split('T')[0]}-${Date.now()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        console.log('Email logs downloaded successfully');
+    } catch (e) {
+        console.error('Failed to download logs:', e);
+    }
+}
+
+// Clear all logs
+function clearEmailLogs() {
+    emailLogs.length = 0;
+    localStorage.removeItem('emailLogs');
+    console.log('Email logs cleared');
+}
+
+// Initialize: Load logs from storage on page load
+loadLogsFromStorage();
+
 // Contact Form
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         // Get form data
         const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData);
+        const formDataObj = {};
+        formData.forEach((value, key) => {
+            formDataObj[key] = value;
+        });
         
-        // Show success message
-        showNotification('Message sent successfully! We will get back to you soon.', 'success');
+        logEmailEvent('info', 'Form submission started', {
+            action: contactForm.action,
+            formData: formDataObj,
+            timestamp: new Date().toISOString()
+        });
         
-        // Reset form
-        contactForm.reset();
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
         
-        // In a real application, you would send this data to a server
-        console.log('Contact Data:', data);
+        // Show loading state
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        
+        const startTime = Date.now();
+        
+        try {
+            logEmailEvent('info', 'Sending request to FormSubmit API', {
+                url: contactForm.action,
+                method: 'POST',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            // Submit form to FormSubmit
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            const responseTime = Date.now() - startTime;
+            logEmailEvent('info', `Response received (${responseTime}ms)`, {
+                status: response.status,
+                statusText: response.statusText,
+                ok: response.ok,
+                headers: Object.fromEntries(response.headers.entries())
+            });
+            
+            let responseData;
+            try {
+                responseData = await response.json();
+                logEmailEvent('info', 'Response data parsed', responseData);
+            } catch (parseError) {
+                logEmailEvent('warning', 'Failed to parse JSON response', {
+                    error: parseError.message,
+                    responseText: await response.text()
+                });
+                responseData = {};
+            }
+            
+            if (response.ok) {
+                logEmailEvent('success', 'Email submission successful!', {
+                    response: responseData,
+                    message: 'Form submitted to FormSubmit. Check email for verification link if first time.',
+                    recipient: 'balajioff26@gmail.com'
+                });
+                
+                // Show success message with verification note
+                showNotification('Message sent successfully! Please check your email (balajioff26@gmail.com) for a verification link if this is your first submission. After verification, you will receive all form submissions.', 'success');
+                
+                // Download logs after successful submission
+                setTimeout(() => {
+                    downloadEmailLogs();
+                }, 1000);
+                
+                // Reset form
+                contactForm.reset();
+            } else {
+                logEmailEvent('error', 'Email submission failed', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    response: responseData
+                });
+                
+                // Show error with details
+                const errorMsg = responseData?.error || 'Form submission failed. Please try again.';
+                showNotification(`Error: ${errorMsg}`, 'error');
+            }
+        } catch (error) {
+            const responseTime = Date.now() - startTime;
+            
+            // Check if it's a network error or CORS issue
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                logEmailEvent('warning', 'CORS/Network issue detected, using fallback method', {
+                    error: error.message,
+                    errorType: error.name,
+                    responseTime: responseTime + 'ms'
+                });
+                
+                // CORS issue - try alternative method
+                logEmailEvent('info', 'Attempting direct form submission (fallback)', {
+                    action: contactForm.action,
+                    method: 'POST (direct)'
+                });
+                
+                // Create a temporary form and submit it directly
+                const tempForm = document.createElement('form');
+                tempForm.method = 'POST';
+                tempForm.action = contactForm.action;
+                tempForm.style.display = 'none';
+                
+                // Copy all form data
+                formData.forEach((value, key) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    tempForm.appendChild(input);
+                });
+                
+                document.body.appendChild(tempForm);
+                
+                logEmailEvent('info', 'Direct form submission initiated', {
+                    note: 'Form submitted via direct POST. Cannot track response.',
+                    recipient: 'balajioff26@gmail.com'
+                });
+                
+                tempForm.submit();
+                
+                // Show success message
+                showNotification('Message is being sent! Please check your email (balajioff26@gmail.com) for a verification link if this is your first submission.', 'success');
+                
+                // Download logs after fallback submission
+                setTimeout(() => {
+                    downloadEmailLogs();
+                }, 1000);
+                
+                contactForm.reset();
+                
+                // Remove temp form after a delay
+                setTimeout(() => {
+                    document.body.removeChild(tempForm);
+                }, 1000);
+            } else {
+                logEmailEvent('error', 'Unexpected error occurred', {
+                    error: error.message,
+                    errorType: error.name,
+                    stack: error.stack,
+                    responseTime: responseTime + 'ms'
+                });
+                
+                // Show error message
+                showNotification('Failed to send message. Please try again or contact us directly.', 'error');
+            }
+        } finally {
+            // Restore button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            
+            logEmailEvent('info', 'Form submission process completed');
+        }
     });
 }
 
