@@ -53,7 +53,7 @@ body {
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 clamp(1rem, 4vw, 3rem);
 }
 
 /* ============================================
@@ -82,9 +82,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 0;
+    padding: clamp(0.875rem, 2vw, 1.25rem) 0;
     position: relative;
-    gap: 2rem;
+    gap: clamp(1rem, 3vw, 2rem);
 }
 
 .logo {
@@ -278,6 +278,8 @@ body {
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
     overflow: hidden;
+    z-index: 0;
+    isolation: isolate;
 }
 
 @keyframes gradientShift {
@@ -293,32 +295,39 @@ body {
     bottom: 0;
     background: rgba(15, 23, 42, 0.7);
     z-index: 1;
+    pointer-events: none;
 }
 
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     width: 100%;
-    padding-top: 80px;
+    padding-top: clamp(80px, 10vw, 100px);
+    isolation: isolate;
 }
 
 .hero-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
+    position: relative;
+    z-index: 11;
 }
 
 .hero-text {
     max-width: 800px;
     color: var(--white);
-    animation: fadeInUp 1s ease;
+    position: relative;
+    z-index: 11;
 }
 
 .hero-logo {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    z-index: 11;
 }
 
 .hero-logo-img {
@@ -328,32 +337,11 @@ body {
     object-fit: contain;
     filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
     opacity: 0;
-    transform: translateX(100px);
-    animation: slideInRight 1.2s ease-out forwards;
+    transform: translateX(100px) scale(0.9);
+    animation: slideInRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     animation-delay: 0.5s;
 }
 
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(100px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 /* ============================================
    Scroll Animation Styles (Apple-style)
@@ -434,10 +422,10 @@ body {
 
 .hero-title {
     font-family: 'Inter', 'Poppins', sans-serif;
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 800;
     line-height: 1.15;
-    margin-bottom: 1.5rem;
+    margin-bottom: clamp(1rem, 2vw, 1.5rem);
     letter-spacing: -1px;
 }
 
@@ -450,37 +438,37 @@ body {
 
 .hero-subtitle {
     font-family: 'Inter', 'Poppins', sans-serif;
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
     color: rgba(255, 255, 255, 0.95);
     letter-spacing: 0.2px;
 }
 
 .hero-description {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.8;
 }
 
 .hero-buttons {
     display: flex;
-    gap: 1rem;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
     flex-wrap: wrap;
 }
 
 .btn {
-    padding: 1.1rem 2.5rem;
+    padding: clamp(0.875rem, 1.5vw, 1.1rem) clamp(1.5rem, 3vw, 2.5rem);
     border: none;
     border-radius: 12px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: clamp(0.5rem, 1vw, 0.75rem);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
     position: relative;
@@ -566,8 +554,8 @@ body {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2;
-    animation: bounce 2s infinite;
+    z-index: 12;
+    pointer-events: none;
 }
 
 @keyframes bounce {
@@ -591,7 +579,9 @@ body {
    Section Styles
    ============================================ */
 section {
-    padding: 3.5rem 0;
+    padding: clamp(3rem, 6vw, 5rem) 0;
+    position: relative;
+    isolation: isolate;
 }
 
 .section-logo {
@@ -625,7 +615,8 @@ section {
 
 .section-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+    padding: 0 clamp(1rem, 2vw, 2rem);
 }
 
 .section-tag {
@@ -646,19 +637,20 @@ section {
 
 .section-title {
     font-family: 'Inter', 'Poppins', sans-serif;
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 1rem;
+    margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
     letter-spacing: -0.5px;
     line-height: 1.2;
 }
 
 .section-description {
-    font-size: 1.1rem;
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
     color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto;
+    padding: 0 clamp(1rem, 2vw, 0);
 }
 
 /* ============================================
@@ -666,12 +658,15 @@ section {
    ============================================ */
 .about {
     background: var(--white);
+    position: relative;
+    z-index: 5;
+    isolation: isolate;
 }
 
 .about-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    gap: clamp(2rem, 4vw, 3rem);
     align-items: center;
 }
 
@@ -692,12 +687,12 @@ section {
 .features-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-top: 2rem;
+    gap: clamp(1.25rem, 2.5vw, 1.5rem);
+    margin-top: clamp(1.5rem, 3vw, 2rem);
 }
 
 .feature-item {
-    padding: 1.5rem;
+    padding: clamp(1.25rem, 2.5vw, 1.5rem);
     background: var(--light-bg);
     border-radius: 12px;
     border: var(--border-medium) solid var(--border-color);
@@ -804,14 +799,14 @@ section {
    ============================================ */
 .windshield-exchange {
     background: var(--white);
-    padding: 3.5rem 0;
+    padding: clamp(3rem, 6vw, 3.5rem) 0;
 }
 
 .exchange-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: clamp(2rem, 4vw, 2.5rem);
 }
 
 .exchange-card {
@@ -875,7 +870,7 @@ section {
 }
 
 .exchange-content {
-    padding: 2rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -923,9 +918,9 @@ section {
 
 .exchange-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 1.5rem);
+    margin-top: clamp(1.5rem, 3vw, 2rem);
 }
 
 .gallery-item {
@@ -1013,9 +1008,9 @@ section {
 
 .authorized-dealers-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin: 2rem auto 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+    margin: clamp(1.5rem, 3vw, 2rem) auto clamp(2rem, 4vw, 2.5rem);
     max-width: 800px;
 }
 
@@ -1055,10 +1050,10 @@ section {
 
 .dealer-card-header {
     background: var(--gradient-primary);
-    padding: 1.5rem;
+    padding: clamp(1.25rem, 2.5vw, 1.5rem);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
     color: var(--white);
 }
 
@@ -1090,7 +1085,7 @@ section {
 }
 
 .dealer-card-body {
-    padding: 2rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
     flex: 1;
 }
 
@@ -1111,7 +1106,7 @@ section {
 }
 
 .dealer-card-footer {
-    padding: 1.25rem 2rem;
+    padding: clamp(1rem, 2vw, 1.25rem) clamp(1.5rem, 3vw, 2rem);
     background: linear-gradient(135deg, rgba(0, 82, 204, 0.05) 0%, rgba(0, 82, 204, 0.02) 100%);
     border-top: 2px solid rgba(0, 82, 204, 0.1);
     display: flex;
@@ -1204,7 +1199,7 @@ section {
    ============================================ */
 .insurance-partners {
     background: var(--light-bg);
-    padding: 3.5rem 0;
+    padding: clamp(3rem, 6vw, 3.5rem) 0;
 }
 
 .cashless-badge {
@@ -1230,9 +1225,9 @@ section {
 
 .insurance-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.2rem;
-    margin-bottom: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: clamp(1rem, 2vw, 1.2rem);
+    margin-bottom: clamp(1.25rem, 2.5vw, 1.5rem);
     align-items: stretch;
 }
 
@@ -1246,7 +1241,7 @@ section {
 
 .insurance-card {
     background: var(--white);
-    padding: 2rem 1.5rem;
+    padding: clamp(1.5rem, 2.5vw, 2rem) clamp(1.25rem, 2vw, 1.5rem);
     border-radius: 16px;
     border: var(--border-medium) solid var(--border-color);
     box-shadow: var(--shadow-md);
@@ -1258,7 +1253,7 @@ section {
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    min-height: 220px;
+    min-height: clamp(200px, 25vw, 220px);
 }
 
 .insurance-card::before {
@@ -1354,15 +1349,86 @@ section {
     font-size: 0.85rem;
     font-weight: 600;
     transition: all 0.3s ease;
+    pointer-events: none;
 }
 
-.insurance-card-link:hover .insurance-link-indicator {
+.insurance-link-indicator.insurance-link-disabled {
+    background: var(--text-light);
+    color: var(--white);
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.insurance-card-link:hover .insurance-link-indicator:not(.insurance-link-disabled) {
     background: var(--gradient-secondary);
     transform: scale(1.05);
 }
 
 .insurance-link-indicator i {
     font-size: 0.75rem;
+}
+
+/* Insurance Card with Multiple Downloads */
+.insurance-card-multiple {
+    display: flex;
+    flex-direction: column;
+}
+
+.insurance-download-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.insurance-download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--gradient-primary);
+    color: var(--white);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.insurance-download-btn:hover {
+    background: var(--gradient-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+}
+
+.insurance-download-btn i {
+    font-size: 0.75rem;
+}
+
+.insurance-card-multiple:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-color);
+}
+
+/* Responsive Download Buttons */
+@media (max-width: 768px) {
+    .insurance-download-buttons {
+        gap: 0.4rem;
+    }
+    
+    .insurance-download-btn {
+        padding: 0.45rem 0.875rem;
+        font-size: 0.8rem;
+    }
+    
+    .insurance-link-indicator {
+        padding: 0.45rem 0.875rem;
+        font-size: 0.8rem;
+    }
 }
 
 .insurance-note {
@@ -1520,8 +1586,8 @@ section {
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 1.5rem);
 }
 
 .product-card {
@@ -1605,7 +1671,7 @@ section {
 }
 
 .product-content {
-    padding: 1.75rem;
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1644,13 +1710,13 @@ section {
 
 .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 1.5rem);
 }
 
 .benefit-card {
     background: var(--dark-secondary);
-    padding: 2rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
     border-radius: 16px;
     text-align: center;
     transition: all 0.3s ease;
@@ -1734,7 +1800,7 @@ section {
 .appointment-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    gap: clamp(2rem, 4vw, 3rem);
     align-items: start;
 }
 
@@ -1755,14 +1821,14 @@ section {
 .contact-info {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: clamp(1.25rem, 2.5vw, 1.5rem);
 }
 
 .contact-item {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+    padding: clamp(1.25rem, 2.5vw, 1.5rem);
     background: var(--white);
     border-radius: 12px;
     box-shadow: var(--shadow-sm);
@@ -1803,24 +1869,24 @@ section {
 
 .appointment-form {
     background: var(--white);
-    padding: 2.5rem;
+    padding: clamp(1.75rem, 3.5vw, 2.5rem);
     border-radius: 16px;
     border: var(--border-medium) solid var(--border-color);
     box-shadow: var(--shadow-lg);
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: clamp(1.25rem, 2vw, 1.5rem);
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 1.1rem 1.25rem;
+    padding: clamp(0.875rem, 1.5vw, 1.1rem) clamp(1rem, 1.8vw, 1.25rem);
     border: 2px solid var(--border-color);
     border-radius: 12px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
     font-family: 'Inter', 'Poppins', sans-serif;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: var(--white);
@@ -1882,7 +1948,7 @@ section {
 
 .quote-form {
     background: var(--light-bg);
-    padding: 2.5rem;
+    padding: clamp(1.75rem, 3.5vw, 2.5rem);
     border-radius: 16px;
     border: var(--border-medium) solid var(--border-color);
     box-shadow: var(--shadow-lg);
@@ -1893,14 +1959,14 @@ section {
    ============================================ */
 .service-area {
     background: var(--white);
-    padding: 3.5rem 0;
+    padding: clamp(3rem, 6vw, 3.5rem) 0;
 }
 
 .locations-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 1.5rem);
+    margin-bottom: clamp(1.25rem, 2.5vw, 1.5rem);
     align-items: stretch;
 }
 
@@ -1941,10 +2007,10 @@ section {
 
 .location-header {
     background: var(--light-bg);
-    padding: 1.5rem;
+    padding: clamp(1.25rem, 2.5vw, 1.5rem);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
     border-bottom: var(--border-medium) solid var(--border-color);
 }
 
@@ -1972,7 +2038,7 @@ section {
 }
 
 .location-content {
-    padding: 2rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1982,8 +2048,8 @@ section {
 .location-detail {
     display: flex;
     align-items: start;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+    margin-bottom: clamp(1.25rem, 2.5vw, 1.5rem);
 }
 
 .location-detail:last-of-type {
@@ -2099,12 +2165,12 @@ section {
 .contact-wrapper {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
-    gap: 2.5rem;
+    gap: clamp(1.5rem, 3.5vw, 2.5rem);
 }
 
 .contact-form {
     background: var(--white);
-    padding: 2.5rem;
+    padding: clamp(1.75rem, 3.5vw, 2.5rem);
     border-radius: 16px;
     border: var(--border-medium) solid var(--border-color);
     box-shadow: var(--shadow-lg);
@@ -2118,7 +2184,7 @@ section {
 
 .contact-info-card {
     background: var(--white);
-    padding: 2rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
     border-radius: 16px;
     border: var(--border-medium) solid var(--border-color);
     box-shadow: var(--shadow-lg);
@@ -2127,8 +2193,8 @@ section {
 .info-item {
     display: flex;
     align-items: start;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
 }
 
 .info-item:last-child {
@@ -2193,14 +2259,14 @@ section {
 .footer {
     background: var(--dark-bg);
     color: var(--white);
-    padding: 3rem 0 1rem;
+    padding: clamp(2rem, 4vw, 3rem) 0 clamp(0.75rem, 1.5vw, 1rem);
 }
 
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
 }
 
 .footer-logo {
@@ -2290,8 +2356,25 @@ section {
 }
 
 /* ============================================
-   Responsive Design
+   Enhanced Responsive Design
    ============================================ */
+
+/* Large Tablets and Small Desktops */
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 clamp(1.5rem, 3vw, 2.5rem);
+    }
+    
+    .hero-wrapper {
+        gap: clamp(1.5rem, 3vw, 2.5rem);
+    }
+    
+    .exchange-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr));
+    }
+}
+
+/* Tablets */
 @media (max-width: 968px) {
     .exchange-grid {
         grid-template-columns: 1fr;
@@ -2302,7 +2385,7 @@ section {
     }
 
     .insurance-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
     }
 
     .locations-grid {
@@ -2311,37 +2394,38 @@ section {
 
     .nav-wrapper {
         justify-content: space-between;
+        padding: clamp(0.75rem, 1.5vw, 1rem) 0;
     }
 
     .logo {
         position: relative;
         left: auto;
-        height: 60px;
+        height: clamp(50px, 8vw, 60px);
     }
 
     .logo-img {
-        max-width: 200px;
-        min-width: 150px;
+        max-width: clamp(150px, 25vw, 200px);
+        min-width: 120px;
     }
 
     .section-logo-img {
-        height: 80px;
-        max-width: 220px;
+        height: clamp(60px, 10vw, 80px);
+        max-width: clamp(180px, 30vw, 220px);
     }
 
     .hero-wrapper {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: clamp(1.5rem, 3vw, 2rem);
         text-align: center;
     }
 
     .hero-logo {
         order: -1;
-        margin-bottom: 1rem;
+        margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
     }
 
     .hero-logo-img {
-        max-width: 300px;
+        max-width: clamp(250px, 40vw, 300px);
     }
 
     .hero-text {
@@ -2367,7 +2451,7 @@ section {
 
     .nav-menu {
         position: fixed;
-        top: 85px;
+        top: clamp(70px, 12vw, 85px);
         left: -100%;
         flex-direction: column;
         background: var(--white);
@@ -2375,7 +2459,7 @@ section {
         text-align: center;
         transition: 0.3s;
         box-shadow: var(--shadow-lg);
-        padding: 2rem 0;
+        padding: clamp(1.5rem, 3vw, 2rem) 0;
         gap: 0;
         border-top: var(--border-medium) solid var(--border-color);
         justify-content: flex-start;
@@ -2388,7 +2472,7 @@ section {
 
     .nav-menu li {
         width: 100%;
-        padding: 1rem 0;
+        padding: clamp(0.75rem, 1.5vw, 1rem) 0;
     }
 
     .nav-toggle {
@@ -2409,95 +2493,133 @@ section {
         transform: rotate(-45deg) translate(7px, -6px);
     }
 
-    .hero-title {
-        font-size: 2.5rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1.2rem;
-    }
-
     .about-content,
     .appointment-wrapper,
     .contact-wrapper {
         grid-template-columns: 1fr;
+        gap: clamp(1.5rem, 3vw, 2rem);
     }
 
     .features-grid {
         grid-template-columns: 1fr;
+        gap: clamp(1rem, 2vw, 1.5rem);
     }
 
     .products-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     }
 
     .form-row {
         grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
     }
 }
 
+/* Small Tablets and Large Phones */
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: 2rem;
+    .container {
+        padding: 0 clamp(1rem, 2.5vw, 1.5rem);
     }
-
-    .section-title {
-        font-size: 2rem;
+    
+    section {
+        padding: clamp(2.5rem, 5vw, 3rem) 0;
     }
-
+    
     .hero-buttons {
         flex-direction: column;
+        width: 100%;
     }
 
     .btn {
         width: 100%;
         justify-content: center;
     }
+    
+    .exchange-gallery {
+        grid-template-columns: 1fr;
+        gap: clamp(1rem, 2vw, 1.5rem);
+    }
+    
+    .insurance-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .authorized-dealers-grid {
+        grid-template-columns: 1fr;
+        gap: clamp(1.25rem, 2.5vw, 1.5rem);
+    }
 }
 
+/* Mobile Phones */
 @media (max-width: 480px) {
     .container {
-        padding: 0 15px;
+        padding: 0 clamp(0.875rem, 2vw, 1rem);
     }
 
     section {
-        padding: 3rem 0;
+        padding: clamp(2rem, 4vw, 2.5rem) 0;
+    }
+
+    .section-header {
+        margin-bottom: clamp(1.25rem, 2.5vw, 1.5rem);
+        padding: 0 clamp(0.75rem, 1.5vw, 1rem);
     }
 
     .exchange-grid {
         grid-template-columns: 1fr;
+        gap: clamp(1.25rem, 2.5vw, 1.5rem);
     }
 
     .exchange-gallery {
         grid-template-columns: 1fr;
+        gap: clamp(1rem, 2vw, 1.25rem);
     }
 
     .service-card,
     .product-card,
     .appointment-form,
     .contact-form,
-    .exchange-card {
-        padding: 1.5rem;
+    .exchange-card,
+    .contact-info-card {
+        padding: clamp(1.25rem, 2.5vw, 1.5rem);
     }
 
     .exchange-image-wrapper {
-        height: 250px;
+        height: clamp(200px, 50vw, 250px);
     }
 
     .insurance-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: clamp(0.75rem, 1.5vw, 1rem);
+    }
+
+    .insurance-card {
+        padding: clamp(1.25rem, 2vw, 1.5rem) clamp(1rem, 1.5vw, 1.25rem);
+        min-height: auto;
     }
 
     .adas-badge,
     .cashless-badge,
     .experience-badge {
-        font-size: 0.9rem;
-        padding: 0.75rem 1.5rem;
+        font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+        padding: clamp(0.625rem, 1.5vw, 0.75rem) clamp(1.25rem, 2.5vw, 1.5rem);
     }
 
     .authorized-dealers-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: clamp(1rem, 2vw, 1.5rem);
         max-width: 100%;
     }
 
@@ -2506,40 +2628,40 @@ section {
     }
 
     .dealer-card-header {
-        padding: 1.25rem;
+        padding: clamp(1rem, 2vw, 1.25rem);
     }
 
     .dealer-icon {
-        width: 50px;
-        height: 50px;
+        width: clamp(45px, 10vw, 50px);
+        height: clamp(45px, 10vw, 50px);
     }
 
     .dealer-icon i {
-        font-size: 1.5rem;
+        font-size: clamp(1.25rem, 2.5vw, 1.5rem);
     }
 
     .dealer-card-body {
-        padding: 1.5rem;
+        padding: clamp(1.25rem, 2.5vw, 1.5rem);
     }
 
     .dealer-name {
-        font-size: 1.75rem;
+        font-size: clamp(1.5rem, 4vw, 1.75rem);
     }
 
     .dealer-card-footer {
-        padding: 1rem 1.5rem;
+        padding: clamp(0.875rem, 1.5vw, 1rem) clamp(1.25rem, 2.5vw, 1.5rem);
     }
 
     .proprietors-info {
         flex-direction: column;
-        gap: 0.75rem;
+        gap: clamp(0.625rem, 1.5vw, 0.75rem);
     }
 
     .proprietor-badge {
-        font-size: 0.85rem;
-        padding: 0.75rem 1.5rem;
+        font-size: clamp(0.8rem, 1.5vw, 0.85rem);
+        padding: clamp(0.625rem, 1.5vw, 0.75rem) clamp(1.25rem, 2.5vw, 1.5rem);
         width: 100%;
-        max-width: 300px;
+        max-width: 100%;
     }
 
     .location-card {
@@ -2547,15 +2669,108 @@ section {
     }
 
     .location-content {
-        padding: 1.5rem;
+        padding: clamp(1.25rem, 2.5vw, 1.5rem);
+    }
+    
+    .location-header {
+        padding: clamp(1.25rem, 2.5vw, 1.5rem);
+    }
+    
+    .quote-form {
+        padding: clamp(1.5rem, 3vw, 2rem);
+    }
+    
+    .footer {
+        padding: clamp(2rem, 4vw, 3rem) 0 clamp(0.75rem, 1.5vw, 1rem);
+    }
+    
+    .footer-content {
+        gap: clamp(1.5rem, 3vw, 2rem);
+    }
+}
+
+/* Extra Small Phones */
+@media (max-width: 360px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+    
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .insurance-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.875rem;
     }
 }
 
 /* ============================================
-   Animations & Effects
+   Professional Animations & Effects
    ============================================ */
+
+/* Enhanced Scroll Animation with Stagger */
+.scroll-fade-in {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+                scale 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.scroll-fade-in.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Slide In from Left */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide In from Right */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Enhanced Fade In Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Fade In */
 .fade-in {
-    animation: fadeIn 0.6s ease;
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeIn {
@@ -2567,14 +2782,15 @@ section {
     }
 }
 
+/* Slide Up */
 .slide-up {
-    animation: slideUp 0.6s ease;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
     }
     to {
         opacity: 1;
@@ -2582,8 +2798,487 @@ section {
     }
 }
 
+/* Scale In Animation */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Rotate In Animation */
+@keyframes rotateIn {
+    from {
+        opacity: 0;
+        transform: rotate(-10deg) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+    }
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Float Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+/* Gradient Animation */
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Text Reveal Animation */
+@keyframes textReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+        clip-path: inset(0 0 100% 0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+/* Card Flip Animation */
+@keyframes cardFlip {
+    from {
+        opacity: 0;
+        transform: perspective(1000px) rotateY(-15deg) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: perspective(1000px) rotateY(0) scale(1);
+    }
+}
+
+/* Enhanced Bounce */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-15px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-7px);
+    }
+}
+
+/* Glow Animation */
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 82, 204, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 82, 204, 0.6);
+    }
+}
+
+/* ============================================
+   Enhanced Element Animations
+   ============================================ */
+
+/* Hero Text Animation */
+.hero-text {
+    animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-title {
+    animation: textReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.hero-subtitle {
+    animation: textReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+.hero-description {
+    animation: textReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+.hero-buttons {
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+}
+
+/* Section Header Animation */
+.section-header {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-title {
+    animation: textReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* Card Hover Animations */
+.exchange-card,
+.product-card,
+.service-card,
+.insurance-card,
+.location-card,
+.benefit-card,
+.feature-item {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+}
+
+.exchange-card:hover,
+.product-card:hover,
+.service-card:hover,
+.insurance-card:hover,
+.location-card:hover,
+.benefit-card:hover,
+.feature-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Image Zoom on Hover */
+.exchange-image,
+.product-image img,
+.gallery-item img {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.exchange-card:hover .exchange-image,
+.product-card:hover .product-image img,
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+/* Icon Animations */
+.feature-icon,
+.service-icon,
+.benefit-icon {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-item:hover .feature-icon,
+.service-card:hover .service-icon,
+.benefit-card:hover .benefit-icon {
+    transform: translateY(-5px) scale(1.1) rotate(5deg);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Button Enhanced Animations - Enhanced */
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: 0;
+}
+
+.btn:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 82, 204, 0.3);
+}
+
+.btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.btn > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Navbar Animation */
+.navbar {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Logo Animation */
+.logo-img {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logo:hover .logo-img {
+    transform: scale(1.05) rotate(2deg);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+/* Form Input Animations */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 82, 204, 0.15);
+}
+
+/* Badge Animations */
+.adas-badge,
+.cashless-badge,
+.experience-badge,
+.proprietor-badge {
+    animation: pulse 3s ease-in-out infinite;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.adas-badge:hover,
+.cashless-badge:hover,
+.experience-badge:hover,
+.proprietor-badge:hover {
+    transform: scale(1.05);
+    animation: glow 2s ease-in-out infinite;
+}
+
+/* Dealer Card Animation */
+.dealer-card {
+    animation: cardFlip 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dealer-card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* Gallery Item Animation */
+.gallery-item {
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 82, 204, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+}
+
+.gallery-item:hover::before {
+    opacity: 1;
+}
+
+/* Section Logo Animation */
+.section-logo {
+    animation: float 6s ease-in-out infinite;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-logo:hover {
+    transform: scale(1.1);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Scroll Indicator Enhanced */
+.scroll-indicator {
+    animation: bounce 2s infinite, float 3s ease-in-out infinite;
+}
+
+.scroll-indicator i {
+    transition: transform 0.3s ease;
+}
+
+.scroll-indicator:hover i {
+    transform: translateY(5px);
+}
+
+/* Loading Animation for Images */
+img {
+    transition: opacity 0.5s ease;
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Parallax Effect - Disabled to prevent overlap issues */
+/* .hero {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+} */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 /* Smooth scroll behavior */
 html {
     scroll-padding-top: 80px;
+    scroll-behavior: smooth;
 }
+
+/* Button Ripple Effect - Additional */
+
+.btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Loading State */
+body:not(.loaded) * {
+    animation-play-state: paused !important;
+}
+
+body.loaded * {
+    animation-play-state: running;
+}
+
+/* Performance Optimization */
+* {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* GPU Acceleration for Smooth Animations */
+.exchange-card,
+.product-card,
+.service-card,
+.insurance-card,
+.location-card,
+.benefit-card,
+.feature-item,
+.gallery-item,
+.btn,
+.nav-link {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Smooth Page Transitions */
+body {
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* Enhanced Staggered Grid Animations */
+.products-grid .product-card:nth-child(1) { animation-delay: 0.1s; }
+.products-grid .product-card:nth-child(2) { animation-delay: 0.2s; }
+.products-grid .product-card:nth-child(3) { animation-delay: 0.3s; }
+.products-grid .product-card:nth-child(4) { animation-delay: 0.4s; }
+.products-grid .product-card:nth-child(5) { animation-delay: 0.5s; }
+.products-grid .product-card:nth-child(6) { animation-delay: 0.6s; }
+
+.exchange-grid .exchange-card:nth-child(1) { animation-delay: 0.1s; }
+.exchange-grid .exchange-card:nth-child(2) { animation-delay: 0.3s; }
+
+.insurance-grid .insurance-card:nth-child(1) { animation-delay: 0.05s; }
+.insurance-grid .insurance-card:nth-child(2) { animation-delay: 0.1s; }
+.insurance-grid .insurance-card:nth-child(3) { animation-delay: 0.15s; }
+.insurance-grid .insurance-card:nth-child(4) { animation-delay: 0.2s; }
+.insurance-grid .insurance-card:nth-child(5) { animation-delay: 0.25s; }
+.insurance-grid .insurance-card:nth-child(6) { animation-delay: 0.3s; }
+
+.benefits-grid .benefit-card:nth-child(1) { animation-delay: 0.1s; }
+.benefits-grid .benefit-card:nth-child(2) { animation-delay: 0.2s; }
+.benefits-grid .benefit-card:nth-child(3) { animation-delay: 0.3s; }
+.benefits-grid .benefit-card:nth-child(4) { animation-delay: 0.4s; }
+.benefits-grid .benefit-card:nth-child(5) { animation-delay: 0.5s; }
+
+.locations-grid .location-card:nth-child(1) { animation-delay: 0.1s; }
+.locations-grid .location-card:nth-child(2) { animation-delay: 0.2s; }
+.locations-grid .location-card:nth-child(3) { animation-delay: 0.3s; }
+
+.features-grid .feature-item:nth-child(1) { animation-delay: 0.1s; }
+.features-grid .feature-item:nth-child(2) { animation-delay: 0.2s; }
+.features-grid .feature-item:nth-child(3) { animation-delay: 0.3s; }
+.features-grid .feature-item:nth-child(4) { animation-delay: 0.4s; }
 

@@ -80,24 +80,27 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// Scroll Animations (Apple-style)
+// Enhanced Professional Scroll Animations
 // ============================================
 let scrollObserver;
 let animatedElements;
+let parallaxElements;
 
 const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
 };
 
-// Initialize scroll animations
+// Initialize scroll animations with stagger effect
 function initScrollAnimations() {
     // Create observer for scroll animations
     scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                // Element is entering viewport - add visible class
-                entry.target.classList.add('visible');
+                // Element is entering viewport - add visible class with stagger
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, index * 50); // Stagger delay
             } else {
                 // Element is leaving viewport - remove visible class for re-animation
                 entry.target.classList.remove('visible');
@@ -118,13 +121,91 @@ function initScrollAnimations() {
         .contact-info-card,
         .contact-item,
         .section-header,
-        .section-logo
+        .section-logo,
+        .dealer-card,
+        .authorized-dealers-grid > *
     `);
 
-    // Add scroll-fade-in class and observe
-    animatedElements.forEach((el) => {
+    // Add scroll-fade-in class and observe with individual delays
+    animatedElements.forEach((el, index) => {
         el.classList.add('scroll-fade-in');
+        el.style.transitionDelay = `${(index % 6) * 0.1}s`; // Stagger based on position
         scrollObserver.observe(el);
+    });
+}
+
+// Parallax effect for hero section - Disabled to prevent overlap
+function initParallax() {
+    // Parallax disabled to prevent overlapping issues
+    // parallaxElements = document.querySelectorAll('.hero, .section-logo');
+    
+    // window.addEventListener('scroll', () => {
+    //     const scrolled = window.pageYOffset;
+    //     
+    //     parallaxElements.forEach((el, index) => {
+    //         if (el.classList.contains('hero')) {
+    //             const rate = scrolled * 0.5;
+    //             el.style.transform = `translateY(${rate}px)`;
+    //         }
+    //     });
+    // });
+}
+
+// Smooth reveal animation for text
+function initTextReveal() {
+    const textElements = document.querySelectorAll('.hero-title, .hero-subtitle, .section-title');
+    
+    textElements.forEach(el => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(el);
+    });
+}
+
+// Enhanced card hover effects
+function initCardAnimations() {
+    const cards = document.querySelectorAll('.exchange-card, .product-card, .service-card, .insurance-card, .location-card, .benefit-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+}
+
+// Button ripple effect
+function initButtonRipple() {
+    const buttons = document.querySelectorAll('.btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
     });
 }
 
@@ -754,13 +835,20 @@ document.addEventListener('DOMContentLoaded', () => {
         heroText.classList.add('fade-in');
     }
     
-    // Initialize scroll animations
+    // Initialize all animations
     initScrollAnimations();
+    initParallax();
+    initTextReveal();
+    initCardAnimations();
+    initButtonRipple();
     
     // Check initial view after a short delay
     setTimeout(checkInitialView, 200);
     
+    // Add loading animation complete class
+    document.body.classList.add('loaded');
+    
     // Initialize all interactive elements
-    console.log('JS Windshield website initialized successfully!');
+    console.log('JS Windshield website initialized successfully with professional animations!');
 });
 
